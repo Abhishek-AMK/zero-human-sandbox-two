@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dark Mode Weather Widget</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: Inter, Arial, sans-serif;
+      background: radial-gradient(circle at top, #1e293b, #020617 70%);
+      color: #fff;
+    }
+    .widget {
+      width: min(92vw, 340px);
+      padding: 1.5rem;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.45);
+    }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .label {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .city {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-top: 0.35rem;
+    }
+    .icon {
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: rgba(59,130,246,0.18);
+      font-size: 1.8rem;
+    }
+    .temp {
+      font-size: 4rem;
+      font-weight: 800;
+      line-height: 1;
+      margin: 0;
+    }
+    .condition {
+      margin-top: 0.5rem;
+      color: #cbd5e1;
+      font-size: 1rem;
+    }
+    .meta {
+      margin-top: 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.85rem;
+    }
+    .chip {
+      padding: 0.9rem 1rem;
+      border-radius: 18px;
+      background: rgba(15,23,42,0.55);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .chip span {
+      display: block;
+      color: #94a3b8;
+      font-size: 0.8rem;
+      margin-bottom: 0.3rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="widget">
+    <div class="top">
+      <div>
+        <div class="label">Local Weather</div>
+        <div class="city">San Francisco</div>
+      </div>
+      <div class="icon">☁️</div>
+    </div>
+    <p class="temp" id="temperature">68°F</p>
+    <div class="condition">Cool breeze · Partly cloudy</div>
+    <div class="meta">
+      <div class="chip"><span>Humidity</span>56%</div>
+      <div class="chip"><span>Wind</span>8 mph</div>
+    </div>
+  </div>
+
+  <script>
+    const temperature = 68;
+    document.getElementById('temperature').textContent = `${temperature}°F`;
+  </script>
+</body>
+</html>
