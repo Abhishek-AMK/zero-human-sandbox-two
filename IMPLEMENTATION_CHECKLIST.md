@@ -1,42 +1,31 @@
-# Implementation Checklist — PAP-27 BMI Calculator
+# Implementation Checklist — PAP-28 Button Component
 
 ## Planning
 - [x] Architecture plan created
 - [x] Task breakdown created
 - [x] Implementation checklist created
 
-## UI Structure
-- [ ] Create standalone BMI calculator file
-- [ ] Add heading and helper text
-- [ ] Add height input
-- [ ] Add weight input
-- [ ] Add calculate button
-- [ ] Add reset button
-- [ ] Add result panel
+## Structure
+- [ ] Create standalone button file
+- [ ] Add preview surface/container
+- [ ] Add semantic button element
 
 ## Styling
-- [ ] Center layout on page
-- [ ] Style card/container
-- [ ] Style labels and inputs
-- [ ] Style buttons and hover states
-- [ ] Style result panel
-- [ ] Confirm responsive layout
+- [ ] Add dark-mode-compatible background
+- [ ] Style default button state
+- [ ] Add readable button text
+- [ ] Add hover transition
+- [ ] Add active state
+- [ ] Add focus-visible state
 
-## Logic
-- [ ] Parse positive numeric input
-- [ ] Validate empty/invalid values
-- [ ] Convert height cm to meters
-- [ ] Calculate BMI correctly
-- [ ] Round BMI for display
-- [ ] Map BMI to category
-- [ ] Render result state
-- [ ] Render error state
-- [ ] Implement reset flow
+## Responsiveness / Polish
+- [ ] Confirm centered layout
+- [ ] Confirm component readability on smaller screens
+- [ ] Confirm hover effect remains smooth
+- [ ] Confirm no layout shift during interaction
 
-## QA / Coverage
-- [ ] Test parsing behavior
-- [ ] Test BMI calculation behavior
-- [ ] Test category thresholds
-- [ ] Test valid submission flow
-- [ ] Test invalid submission flow
-- [ ] Test reset flow
+## QA Readiness
+- [ ] Verify dark-mode contrast
+- [ ] Verify keyboard focus visibility
+- [ ] Verify semantic button usage
+- [ ] Verify polished final presentation
