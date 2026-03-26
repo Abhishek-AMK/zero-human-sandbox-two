@@ -1,100 +1,91 @@
-# Task Breakdown — PAP-26 BMI Calculator
+# Task Breakdown — PAP-27 BMI Calculator
 
-## Task 1 — Build HTML Structure
+## Task 1 — Create the BMI calculator file
 **Assigned to:** Grunt
 
 ### Work
-- Create the standalone calculator document.
-- Add a main card/container.
-- Add title and helper copy.
-- Add labeled height and weight inputs.
-- Add calculate and reset buttons.
-- Add a result/output area.
+- Create a standalone BMI calculator HTML file.
+- Add semantic page structure and a central card layout.
+- Include heading, helper copy, form controls, and result region.
 
 ### Acceptance Criteria
-- File exists in the target directory.
-- Inputs are clearly labeled.
-- Buttons are present and understandable.
-- Result area is visible before any interaction.
+- Calculator file exists in the working directory.
+- UI contains both inputs, both buttons, and a result panel.
+- Structure is readable and logically organized.
 
-## Task 2 — Create Responsive Visual Design
+## Task 2 — Build the visual design
 **Assigned to:** Grunt
 
 ### Work
-- Apply polished UI styling.
-- Use a strong visual hierarchy.
-- Make the card look modern and attractive.
-- Ensure layout works on desktop and mobile widths.
-- Style hover/focus states for inputs and buttons.
+- Apply a polished UI treatment suitable for a modern product surface.
+- Use responsive spacing and clear typography.
+- Style buttons, inputs, and result state cleanly.
 
 ### Acceptance Criteria
-- UI looks cohesive and modern.
-- Card remains centered and readable.
-- Inputs and buttons are visually distinct.
-- Layout does not break at smaller viewport widths.
+- UI looks visually cohesive and intentional.
+- Inputs and actions are easy to distinguish.
+- Layout remains usable on smaller screens.
 
-## Task 3 — Implement BMI Logic
+## Task 3 — Implement validation helpers
 **Assigned to:** Grunt
 
 ### Work
-- Parse numeric input values.
-- Convert height from cm to meters.
-- Compute BMI using the standard formula.
-- Round output to one decimal place.
-- Display the computed BMI.
+- Parse height and weight safely.
+- Reject empty, zero, negative, and invalid values.
+- Surface clear error feedback.
 
 ### Acceptance Criteria
-- Correct BMI is shown for valid inputs.
-- Formula uses metric units correctly.
-- Output format is human-readable.
+- Invalid values do not produce BMI output.
+- Error state is clear and readable.
+- Validation behavior is consistent for both fields.
 
-## Task 4 — Implement BMI Category Mapping
+## Task 4 — Implement BMI formula logic
 **Assigned to:** Grunt
 
 ### Work
-- Add category mapping logic for BMI ranges.
-- Display the category with the BMI result.
+- Convert centimeters to meters.
+- Calculate BMI using the standard formula.
+- Format result to one decimal place for display.
 
 ### Acceptance Criteria
-- Underweight is shown for BMI < 18.5.
-- Normal weight is shown for BMI >= 18.5 and < 25.
-- Overweight is shown for BMI >= 25 and < 30.
-- Obesity is shown for BMI >= 30.
+- BMI formula is correct.
+- Output is stable and human-readable.
+- Decimal inputs are handled correctly.
 
-## Task 5 — Add Validation and Error Handling
+## Task 5 — Implement BMI category mapping
 **Assigned to:** Grunt
 
 ### Work
-- Prevent invalid calculations when fields are empty.
-- Prevent zero or negative values.
-- Show clear user-facing error feedback.
+- Add category thresholds.
+- Display the correct category alongside the BMI result.
 
 ### Acceptance Criteria
-- Invalid input never produces a misleading BMI.
-- Error messaging is visible and understandable.
-- Valid input clears prior error state.
+- Underweight maps to BMI < 18.5.
+- Normal weight maps to BMI >= 18.5 and < 25.
+- Overweight maps to BMI >= 25 and < 30.
+- Obesity maps to BMI >= 30.
 
-## Task 6 — Add Reset Behavior
+## Task 6 — Implement result + reset behaviors
 **Assigned to:** Grunt
 
 ### Work
-- Reset both fields.
-- Restore the default result panel state.
+- Render result state after valid calculation.
+- Render error state after invalid submission.
+- Add reset behavior to clear fields and restore default output.
 
 ### Acceptance Criteria
-- Reset clears all entered values.
-- Reset removes prior result/error output.
-- UI returns to initial ready state.
+- Successful calculation replaces placeholder copy with result content.
+- Error state replaces placeholder copy with validation content.
+- Reset returns the interface to its initial state.
 
-## Task 7 — Final Polish Pass
+## Task 7 — Add lightweight test coverage
 **Assigned to:** Grunt
 
 ### Work
-- Check spacing, typography, and button copy.
-- Confirm the interaction flow feels smooth.
-- Ensure result messaging is friendly and concise.
+- Add local tests covering parsing, formula logic, category mapping, and basic interaction flow.
 
 ### Acceptance Criteria
-- UI feels intentional and clean.
-- Labels, helper copy, and result text are consistent.
-- No obvious visual or interaction rough edges remain.
+- Core helper logic is exercised by tests.
+- At least one valid interaction path is covered.
+- At least one invalid interaction path is covered.
+- Reset behavior is covered.

@@ -1,13 +1,13 @@
-# Implementation Checklist — PAP-26 BMI Calculator
+# Implementation Checklist — PAP-27 BMI Calculator
 
 ## Planning
-- [x] Architecture defined
-- [x] Task breakdown documented
-- [x] Acceptance criteria documented
+- [x] Architecture plan created
+- [x] Task breakdown created
+- [x] Implementation checklist created
 
-## Build Scope
+## UI Structure
 - [ ] Create standalone BMI calculator file
-- [ ] Add semantic HTML structure
+- [ ] Add heading and helper text
 - [ ] Add height input
 - [ ] Add weight input
 - [ ] Add calculate button
@@ -15,33 +15,28 @@
 - [ ] Add result panel
 
 ## Styling
-- [ ] Center layout on viewport
-- [ ] Create polished card/container UI
+- [ ] Center layout on page
+- [ ] Style card/container
 - [ ] Style labels and inputs
-- [ ] Style primary and secondary buttons
-- [ ] Add hover/focus states
-- [ ] Ensure mobile responsiveness
+- [ ] Style buttons and hover states
+- [ ] Style result panel
+- [ ] Confirm responsive layout
 
 ## Logic
-- [ ] Parse and validate inputs
-- [ ] Convert cm to meters
+- [ ] Parse positive numeric input
+- [ ] Validate empty/invalid values
+- [ ] Convert height cm to meters
 - [ ] Calculate BMI correctly
-- [ ] Round BMI to one decimal place
+- [ ] Round BMI for display
 - [ ] Map BMI to category
-- [ ] Render result text
-- [ ] Render error state for invalid input
-- [ ] Implement reset behavior
+- [ ] Render result state
+- [ ] Render error state
+- [ ] Implement reset flow
 
-## Edge Cases
-- [ ] Empty inputs handled
-- [ ] Zero values handled
-- [ ] Negative values handled
-- [ ] Decimal values handled
-- [ ] Recalculation after error handled
-
-## QA Readiness
-- [ ] Result copy is readable
-- [ ] Layout remains stable on small screens
-- [ ] Button behavior is clear
-- [ ] Inputs remain accessible and labeled
-- [ ] Default state is informative
+## QA / Coverage
+- [ ] Test parsing behavior
+- [ ] Test BMI calculation behavior
+- [ ] Test category thresholds
+- [ ] Test valid submission flow
+- [ ] Test invalid submission flow
+- [ ] Test reset flow

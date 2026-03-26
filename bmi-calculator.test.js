@@ -50,20 +50,20 @@ context.window = context;
 vm.createContext(context);
 vm.runInContext(scriptMatch[1], context);
 
-const bmi = context.BMICalculator;
-assert.ok(bmi, 'BMICalculator API should be exposed');
+const api = context.BMICalculator;
+assert.ok(api, 'BMICalculator API should be available');
 
-assert.strictEqual(bmi.parsePositiveNumber('170'), 170);
-assert.strictEqual(bmi.parsePositiveNumber('65.5'), 65.5);
-assert.strictEqual(bmi.parsePositiveNumber(''), null);
-assert.strictEqual(bmi.parsePositiveNumber('-3'), null);
-assert.strictEqual(bmi.parsePositiveNumber('abc'), null);
+assert.strictEqual(api.parsePositiveNumber('170'), 170);
+assert.strictEqual(api.parsePositiveNumber('65.5'), 65.5);
+assert.strictEqual(api.parsePositiveNumber(''), null);
+assert.strictEqual(api.parsePositiveNumber('-1'), null);
+assert.strictEqual(api.parsePositiveNumber('abc'), null);
 
-assert.strictEqual(Number(bmi.calculateBMI(170, 65).toFixed(1)), 22.5);
-assert.strictEqual(bmi.getBMICategory(17.9), 'Underweight');
-assert.strictEqual(bmi.getBMICategory(22.5), 'Normal weight');
-assert.strictEqual(bmi.getBMICategory(27.2), 'Overweight');
-assert.strictEqual(bmi.getBMICategory(31.4), 'Obesity');
+assert.strictEqual(Number(api.calculateBMI(170, 65).toFixed(1)), 22.5);
+assert.strictEqual(api.getBMICategory(17.4), 'Underweight');
+assert.strictEqual(api.getBMICategory(22.5), 'Normal weight');
+assert.strictEqual(api.getBMICategory(28.2), 'Overweight');
+assert.strictEqual(api.getBMICategory(33.8), 'Obesity');
 
 elements.height.value = '170';
 elements.weight.value = '65';

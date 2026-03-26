@@ -1,142 +1,169 @@
-# Architecture Plan — PAP-26 BMI Calculator
+# Architecture Plan — PAP-27 BMI Calculator
 
 ## Goal
-Create a polished, user-friendly BMI calculator UI as a standalone front-end artifact with simple interactive logic and clear result feedback.
+Deliver a visually polished, user-friendly BMI calculator UI that performs client-side BMI calculation, shows clear feedback, and remains easy to use on desktop and mobile.
 
 ## System / Module Design and Boundaries
 
-### 1. Presentation Layer
-Responsible for layout, typography, spacing, color, visual hierarchy, button styling, and responsive behavior.
+### 1. UI / Presentation Module
+**Responsibilities**
+- Page background and overall visual theme
+- Card/container composition
+- Typography, spacing, and visual hierarchy
+- Responsive layout behavior
+- Styling for inputs, buttons, and result area
 
-**Boundary:**
-- Handles only rendering and user-facing visuals.
-- Must not contain BMI calculation rules beyond UI state display concerns.
+**Boundaries**
+- Must not own BMI formula logic
+- May reflect state visually, but should not compute business rules
 
-### 2. Input Layer
-Responsible for capturing user input for:
-- height
-- weight
-- optional unit assumptions if added later
+### 2. Input + Validation Module
+**Responsibilities**
+- Read raw height and weight values from the UI
+- Convert raw string input into usable numeric values
+- Reject empty, zero, negative, or invalid values
+- Route valid data into calculation logic
 
-**Boundary:**
-- Reads and validates raw form values.
-- Passes normalized numeric values into calculation logic.
+**Boundaries**
+- Should normalize input only
+- Should not render final UI copy directly beyond invoking result/error helpers
 
-### 3. Calculation Layer
-Responsible for BMI formula computation:
-- BMI = weightKg / (heightM * heightM)
+### 3. Calculation Module
+**Responsibilities**
+- Convert centimeters to meters
+- Calculate BMI using the standard formula
+- Return numeric BMI result for rendering
 
-**Boundary:**
-- Pure logic only.
-- Should not directly manipulate DOM except through result-rendering integration.
+**Boundaries**
+- Pure logic only
+- No DOM manipulation in formula helper
 
-### 4. Result / Feedback Layer
-Responsible for:
-- displaying calculated BMI
-- displaying category label
-- displaying validation or error messages
+### 4. Classification Module
+**Responsibilities**
+- Map BMI values into standard categories:
+  - Underweight
+  - Normal weight
+  - Overweight
+  - Obesity
 
-**Boundary:**
-- Renders output based on already-computed values.
-- Does not own formula logic.
+**Boundaries**
+- Deterministic category mapping only
+- No visual rendering responsibilities
+
+### 5. Result Rendering Module
+**Responsibilities**
+- Show formatted BMI result
+- Show category output
+- Show validation/error state
+- Restore default empty-state messaging on reset
+
+**Boundaries**
+- Consumes processed data from validation/calculation helpers
+- Does not own formula or parsing logic
 
 ## File-Level Implementation Map
 
-### Option A: Single-file implementation (recommended for simplicity)
+### Recommended implementation structure
+**Single-file delivery preferred for simplicity:**
 - `bmi-calculator.html`
   - semantic HTML structure
-  - embedded CSS for responsive card-based UI
-  - embedded JS for validation, BMI calculation, reset behavior, and result rendering
+  - embedded CSS for layout and visual design
+  - embedded JS for validation, calculation, category mapping, and rendering
 
-### Internal sections inside the file
-- **HTML section**
-  - container/card wrapper
-  - title + helper text
-  - height input
-  - weight input
-  - calculate button
-  - reset button
-  - result panel
-- **CSS section**
-  - page background
-  - card glassmorphism styling
-  - input states
-  - button states
-  - result panel styling
-  - mobile responsiveness
-- **JavaScript section**
-  - DOM references
-  - input parsing
-  - validation helper
-  - BMI calculator helper
-  - category helper
-  - event listeners
+### File section map
+
+#### HTML Section
+- main wrapper/card
+- heading and helper description
+- height input field
+- weight input field
+- calculate button
+- reset button
+- result panel with default state
+
+#### CSS Section
+- full-page centered layout
+- glassmorphism or premium card styling
+- input styling and focus states
+- button styling and hover states
+- result panel styling
+- mobile responsive behavior
+
+#### JavaScript Section
+- DOM references
+- parse helper
+- BMI calculation helper
+- category helper
+- render success helper
+- render error helper
+- reset helper
+- event listeners
 
 ## Interface / API Contracts
 
 ### DOM Contract
-Expected IDs / elements:
-- `#height` → numeric input in centimeters
-- `#weight` → numeric input in kilograms
-- `#calculate` → primary action button
-- `#reset` → secondary action button
-- `#result` → result container
+Expected elements and IDs:
+- `#height` → numeric height input in centimeters
+- `#weight` → numeric weight input in kilograms
+- `#calculate` → primary CTA button
+- `#reset` → reset button
+- `#result` → result panel container
 
-### JS Helper Contracts
+### JavaScript Helper Contracts
 
 #### `parsePositiveNumber(value: string): number | null`
 - Input: raw input string
-- Output: positive numeric value, or `null` if invalid
+- Output: positive numeric value or `null` if invalid
 
 #### `calculateBMI(heightCm: number, weightKg: number): number`
-- Input: validated height in cm and weight in kg
+- Input: validated height in centimeters and weight in kilograms
 - Output: numeric BMI value
 
 #### `getBMICategory(bmi: number): string`
-- Returns one of:
+- Output values:
   - `Underweight`
   - `Normal weight`
   - `Overweight`
   - `Obesity`
 
 #### `renderResult(bmi: number, category: string): void`
-- Updates result panel with formatted BMI and category
+- Displays formatted BMI and corresponding category
 
 #### `renderError(message: string): void`
-- Displays validation feedback in result panel
+- Displays user-readable validation feedback
 
 #### `resetForm(): void`
-- Clears inputs and restores default result state
+- Clears inputs and restores the default result prompt
 
 ## Risks and Edge Cases
 
 ### Validation Risks
-- empty height field
-- empty weight field
+- empty height input
+- empty weight input
 - zero values
 - negative values
-- non-numeric characters
-- extremely large values producing unrealistic BMI
+- non-numeric values
+- decimal handling inconsistencies
 
-### UX Edge Cases
-- user presses calculate repeatedly
-- user clears only one input then recalculates
-- decimal inputs should still work
-- result panel should remain readable on small screens
+### UX Risks
+- result state unclear after invalid submission
+- reset not fully restoring default UI state
+- keyboard-only users lacking smooth interaction
+- mobile layout crowding or overflow
 
-### Accessibility Risks
-- insufficient color contrast
-- missing labels
-- unclear error messaging
-- keyboard focus visibility
+### Rendering Risks
+- low contrast text against dark backgrounds
+- result panel too small for longer feedback
+- buttons wrapping awkwardly on narrow screens
 
-### Layout Risks
-- overflow on narrow mobile widths
-- oversized text causing wrapping issues
-- button stack readability on small screens
+### Logic Risks
+- incorrect cm-to-meter conversion
+- wrong category thresholds at boundary values
+- rounding inconsistency in displayed BMI
 
-## Recommended Implementation Notes
-- Keep the calculator self-contained in one file.
-- Prefer semantic labels and accessible input structure.
-- Use simple, deterministic BMI categories.
-- Ensure reset always returns UI to a clean default state.
+## Recommended Notes for Implementation
+- Keep logic simple and deterministic.
+- Prefer semantic labels and accessible structure.
+- Ensure the empty state is informative before first calculation.
+- Keep the result copy concise and friendly.
+- Preserve clean separation between parsing, formula logic, category mapping, and rendering.
