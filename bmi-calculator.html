@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BMI Calculator</title>
+  <style>
+    :root {
+      --bg-start: #0f172a;
+      --bg-end: #2563eb;
+      --card-bg: rgba(255, 255, 255, 0.10);
+      --card-border: rgba(255, 255, 255, 0.18);
+      --text-main: #f8fafc;
+      --text-muted: #cbd5e1;
+      --input-bg: rgba(15, 23, 42, 0.55);
+      --focus-ring: rgba(125, 211, 252, 0.9);
+      --primary-start: #22c55e;
+      --primary-end: #16a34a;
+      --secondary-bg: rgba(255, 255, 255, 0.14);
+      --result-bg: rgba(15, 23, 42, 0.48);
+      --error-text: #fecdd3;
+      --error-strong: #fda4af;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      font-family: Inter, Arial, sans-serif;
+      color: var(--text-main);
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 32%),
+        linear-gradient(135deg, var(--bg-start), var(--bg-end));
+    }
+
+    .card {
+      width: min(100%, 440px);
+      padding: 28px;
+      border-radius: 28px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.85rem, 4vw, 2.2rem);
+      line-height: 1.1;
+    }
+
+    .subtitle {
+      margin: 0 0 24px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: var(--input-bg);
+      color: var(--text-main);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    }
+
+    input::placeholder {
+      color: #94a3b8;
+    }
+
+    input:focus-visible,
+    button:focus-visible {
+      box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.18);
+      border-color: var(--focus-ring);
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 22px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      flex: 1 1 160px;
+      border: none;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+      box-shadow: 0 12px 28px rgba(22, 163, 74, 0.28);
+    }
+
+    .secondary {
+      color: #fff;
+      background: var(--secondary-bg);
+    }
+
+    .result {
+      margin-top: 22px;
+      padding: 16px;
+      min-height: 96px;
+      border-radius: 18px;
+      background: var(--result-bg);
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .result strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1.3rem;
+      color: var(--text-main);
+    }
+
+    .result.error {
+      color: var(--error-text);
+      border: 1px solid rgba(253, 164, 175, 0.22);
+    }
+
+    .result.error strong {
+      color: var(--error-strong);
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 16px;
+      }
+
+      .card {
+        padding: 22px;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title">BMI Calculator</h1>
+    <p class="subtitle">A clean, user-friendly way to check your body mass index in seconds.</p>
+
+    <div class="field">
+      <label for="height">Height (cm)</label>
+      <input id="height" type="number" min="0" step="0.1" inputmode="decimal" placeholder="e.g. 170" />
+    </div>
+
+    <div class="field">
+      <label for="weight">Weight (kg)</label>
+      <input id="weight" type="number" min="0" step="0.1" inputmode="decimal" placeholder="e.g. 65" />
+    </div>
+
+    <div class="actions">
+      <button class="primary" id="calculate" type="button">Calculate BMI</button>
+      <button class="secondary" id="reset" type="button">Reset</button>
+    </div>
+
+    <section class="result" id="result" aria-live="polite">
+      <strong>Your result will appear here</strong>
+      Enter your height and weight, then press calculate.
+    </section>
+  </main>
+
+  <script>
+    const heightInput = document.getElementById('height');
+    const weightInput = document.getElementById('weight');
+    const result = document.getElementById('result');
+
+    function parsePositiveNumber(value) {
+      const parsed = Number.parseFloat(value);
+      return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+    }
+
+    function calculateBMI(heightCm, weightKg) {
+      const heightM = heightCm / 100;
+      return weightKg / (heightM * heightM);
+    }
+
+    function getBMICategory(bmi) {
+      if (bmi < 18.5) return 'Underweight';
+      if (bmi < 25) return 'Normal weight';
+      if (bmi < 30) return 'Overweight';
+      return 'Obesity';
+    }
+
+    function renderResult(bmi, category) {
+      result.classList.remove('error');
+      result.innerHTML = `<strong>BMI: ${bmi.toFixed(1)}</strong>Category: ${category}`;
+    }
+
+    function renderError(message) {
+      result.classList.add('error');
+      result.innerHTML = `<strong>Invalid input</strong>${message}`;
+    }
+
+    function resetForm() {
+      heightInput.value = '';
+      weightInput.value = '';
+      result.classList.remove('error');
+      result.innerHTML = '<strong>Your result will appear here</strong>Enter your height and weight, then press calculate.';
+    }
+
+    function handleCalculation() {
+      const heightCm = parsePositiveNumber(heightInput.value);
+      const weightKg = parsePositiveNumber(weightInput.value);
+
+      if (heightCm === null || weightKg === null) {
+        renderError('Please enter valid positive numbers for height and weight.');
+        return;
+      }
+
+      const bmi = calculateBMI(heightCm, weightKg);
+      const category = getBMICategory(bmi);
+      renderResult(bmi, category);
+    }
+
+    document.getElementById('calculate').addEventListener('click', handleCalculation);
+    document.getElementById('reset').addEventListener('click', resetForm);
+
+    [heightInput, weightInput].forEach((input) => {
+      input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          handleCalculation();
+        }
+      });
+    });
+
+    window.BMICalculator = {
+      parsePositiveNumber,
+      calculateBMI,
+      getBMICategory,
+      renderResult,
+      renderError,
+      resetForm,
+      handleCalculation,
+    };
+  </script>
+</body>
+</html>
