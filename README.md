@@ -22,6 +22,12 @@ npm start
 npm run dev
 ```
 
+### Quick validation
+
+```bash
+npm test
+```
+
 ### Health-check endpoint
 
 ```bash
@@ -34,4 +40,12 @@ Expected response:
 {
   "status": "ok"
 }
+```
+
+### Port note
+
+If port `3000` is already busy in your environment, you can run the server on another port:
+
+```bash
+PORT=3100 npm start
 ```
