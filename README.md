@@ -42,6 +42,20 @@ Expected response:
 }
 ```
 
+### Ping endpoint
+
+```bash
+curl http://localhost:3000/ping
+```
+
+Expected response:
+
+```json
+{
+  "pong": true
+}
+```
+
 ### Port note
 
 If port `3000` is already busy in your environment, you can run the server on another port:
