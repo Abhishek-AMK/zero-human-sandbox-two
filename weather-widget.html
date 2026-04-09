@@ -3,104 +3,165 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dark Mode Weather Widget</title>
+  <title>Dark-Mode Weather Widget</title>
   <style>
+    :root {
+      --bg-start: #0f172a;
+      --bg-end: #1d4ed8;
+      --surface: rgba(255, 255, 255, 0.08);
+      --surface-border: rgba(255, 255, 255, 0.14);
+      --text-main: #f8fafc;
+      --text-muted: #cbd5e1;
+      --accent: #7dd3fc;
+      --metric-bg: rgba(15, 23, 42, 0.52);
+    }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       min-height: 100vh;
       display: grid;
       place-items: center;
+      padding: 24px;
       font-family: Inter, Arial, sans-serif;
-      background: radial-gradient(circle at top, #1e293b, #020617 70%);
-      color: #fff;
+      color: var(--text-main);
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 30%),
+        linear-gradient(135deg, var(--bg-start), var(--bg-end));
     }
+
     .widget {
-      width: min(92vw, 340px);
-      padding: 1.5rem;
+      width: min(100%, 360px);
+      padding: 24px;
       border-radius: 28px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
       backdrop-filter: blur(18px);
-      box-shadow: 0 24px 80px rgba(0,0,0,0.45);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
     }
+
     .top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.5rem;
+      gap: 16px;
+      margin-bottom: 20px;
     }
-    .label {
-      font-size: 0.9rem;
-      color: #cbd5e1;
+
+    .eyebrow {
+      margin: 0 0 6px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
-    .city {
+
+    #location {
+      margin: 0;
       font-size: 1.3rem;
       font-weight: 700;
-      margin-top: 0.35rem;
     }
+
     .icon {
-      width: 58px;
-      height: 58px;
+      width: 60px;
+      height: 60px;
       display: grid;
       place-items: center;
       border-radius: 18px;
-      background: rgba(59,130,246,0.18);
-      font-size: 1.8rem;
+      background: rgba(125, 211, 252, 0.16);
+      color: var(--accent);
+      font-size: 1.75rem;
+      flex-shrink: 0;
     }
-    .temp {
-      font-size: 4rem;
-      font-weight: 800;
-      line-height: 1;
+
+    #temperature {
       margin: 0;
+      font-size: clamp(3rem, 8vw, 4rem);
+      line-height: 1;
+      font-weight: 800;
     }
-    .condition {
-      margin-top: 0.5rem;
-      color: #cbd5e1;
-      font-size: 1rem;
+
+    #condition {
+      margin: 10px 0 0;
+      color: var(--text-muted);
+      line-height: 1.5;
     }
-    .meta {
-      margin-top: 1.5rem;
+
+    .metrics {
+      margin-top: 20px;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 0.85rem;
+      gap: 12px;
     }
-    .chip {
-      padding: 0.9rem 1rem;
+
+    .metric {
+      padding: 14px;
       border-radius: 18px;
-      background: rgba(15,23,42,0.55);
+      background: var(--metric-bg);
       border: 1px solid rgba(255,255,255,0.06);
     }
-    .chip span {
+
+    .metric span {
       display: block;
-      color: #94a3b8;
       font-size: 0.8rem;
-      margin-bottom: 0.3rem;
+      color: #94a3b8;
+      margin-bottom: 4px;
+    }
+
+    @media (max-width: 420px) {
+      body {
+        padding: 16px;
+      }
+
+      .widget {
+        padding: 20px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="widget">
+  <main class="widget" aria-label="Weather widget">
     <div class="top">
       <div>
-        <div class="label">Local Weather</div>
-        <div class="city">San Francisco</div>
+        <p class="eyebrow">Local Weather</p>
+        <h1 id="location">--</h1>
       </div>
-      <div class="icon">☁️</div>
+      <div class="icon" aria-hidden="true">☁️</div>
     </div>
-    <p class="temp" id="temperature">68°F</p>
-    <div class="condition">Cool breeze · Partly cloudy</div>
-    <div class="meta">
-      <div class="chip"><span>Humidity</span>56%</div>
-      <div class="chip"><span>Wind</span>8 mph</div>
+
+    <p id="temperature">--</p>
+    <p id="condition">Loading static conditions...</p>
+
+    <div class="metrics">
+      <div class="metric"><span>Humidity</span><strong id="humidity">--</strong></div>
+      <div class="metric"><span>Wind</span><strong id="wind">--</strong></div>
     </div>
-  </div>
+  </main>
 
   <script>
-    const temperature = 68;
-    document.getElementById('temperature').textContent = `${temperature}°F`;
+    const weatherData = {
+      location: 'San Francisco',
+      temperature: 68,
+      condition: 'Partly cloudy · Cool evening breeze',
+      humidity: '56%',
+      wind: '8 mph',
+    };
+
+    function renderWeather(data) {
+      document.getElementById('location').textContent = data.location;
+      document.getElementById('temperature').textContent = `${data.temperature}°F`;
+      document.getElementById('condition').textContent = data.condition;
+      document.getElementById('humidity').textContent = data.humidity;
+      document.getElementById('wind').textContent = data.wind;
+    }
+
+    renderWeather(weatherData);
+
+    window.WeatherWidget = {
+      weatherData,
+      renderWeather,
+    };
   </script>
 </body>
 </html>
