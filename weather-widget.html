@@ -5,98 +5,309 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dark Mode Weather Widget</title>
   <style>
+    :root {
+      color-scheme: dark;
+      --page-start: #1e293b;
+      --page-end: #020617;
+      --surface: rgba(255, 255, 255, 0.08);
+      --surface-strong: rgba(15, 23, 42, 0.58);
+      --border: rgba(255, 255, 255, 0.12);
+      --border-soft: rgba(255, 255, 255, 0.06);
+      --text-primary: #ffffff;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --accent: rgba(59, 130, 246, 0.18);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      --shadow-soft: 0 18px 48px rgba(0, 0, 0, 0.22);
+      --transition: 0.18s ease;
+    }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       min-height: 100vh;
-      display: grid;
-      place-items: center;
       font-family: Inter, Arial, sans-serif;
-      background: radial-gradient(circle at top, #1e293b, #020617 70%);
-      color: #fff;
+      background: radial-gradient(circle at top, var(--page-start), var(--page-end) 70%);
+      color: var(--text-primary);
     }
+
+    .page {
+      width: min(1100px, 100%);
+      margin: 0 auto;
+      padding: 3rem 1rem 4rem;
+    }
+
+    .page-shell {
+      display: grid;
+      gap: 2rem;
+    }
+
     .widget {
-      width: min(92vw, 340px);
+      width: min(100%, 340px);
       padding: 1.5rem;
       border-radius: 28px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: var(--surface);
+      border: 1px solid var(--border);
       backdrop-filter: blur(18px);
-      box-shadow: 0 24px 80px rgba(0,0,0,0.45);
+      box-shadow: var(--shadow);
     }
+
     .top {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1.5rem;
     }
+
     .label {
       font-size: 0.9rem;
-      color: #cbd5e1;
+      color: var(--text-secondary);
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
+
     .city {
       font-size: 1.3rem;
       font-weight: 700;
       margin-top: 0.35rem;
     }
+
     .icon {
       width: 58px;
       height: 58px;
       display: grid;
       place-items: center;
       border-radius: 18px;
-      background: rgba(59,130,246,0.18);
+      background: var(--accent);
       font-size: 1.8rem;
     }
+
     .temp {
       font-size: 4rem;
       font-weight: 800;
       line-height: 1;
       margin: 0;
     }
+
     .condition {
       margin-top: 0.5rem;
-      color: #cbd5e1;
+      color: var(--text-secondary);
       font-size: 1rem;
     }
+
     .meta {
       margin-top: 1.5rem;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 0.85rem;
     }
+
     .chip {
       padding: 0.9rem 1rem;
       border-radius: 18px;
-      background: rgba(15,23,42,0.55);
-      border: 1px solid rgba(255,255,255,0.06);
+      background: var(--surface-strong);
+      border: 1px solid var(--border-soft);
     }
+
     .chip span {
       display: block;
-      color: #94a3b8;
+      color: var(--text-muted);
       font-size: 0.8rem;
       margin-bottom: 0.3rem;
+    }
+
+    .testimonials {
+      padding: 2rem;
+      border-radius: 32px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.9rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      line-height: 1.08;
+    }
+
+    .section-copy {
+      max-width: 680px;
+      margin: 0.85rem 0 0;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .testimonials-grid {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .testimonial-card {
+      padding: 1.25rem;
+      border-radius: 24px;
+      background: rgba(15, 23, 42, 0.58);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.14);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.28);
+    }
+
+    .testimonial-header {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .testimonial-avatar {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: rgba(59, 130, 246, 0.16);
+      color: #bfdbfe;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+
+    .testimonial-meta h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .testimonial-meta p {
+      margin: 0.3rem 0 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .testimonial-quote {
+      margin: 0;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      font-size: 0.96rem;
+    }
+
+    @media (max-width: 700px) {
+      .page {
+        padding: 1.5rem 1rem 3rem;
+      }
+
+      .widget {
+        width: 100%;
+      }
+
+      .testimonials {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="widget">
-    <div class="top">
-      <div>
-        <div class="label">Local Weather</div>
-        <div class="city">San Francisco</div>
-      </div>
-      <div class="icon">☁️</div>
+  <main class="page">
+    <div class="page-shell">
+      <section class="widget" aria-label="Weather overview">
+        <div class="top">
+          <div>
+            <div class="label">Local Weather</div>
+            <div class="city">San Francisco</div>
+          </div>
+          <div class="icon">☁️</div>
+        </div>
+        <p class="temp" id="temperature">68°F</p>
+        <div class="condition">Cool breeze · Partly cloudy</div>
+        <div class="meta">
+          <div class="chip"><span>Humidity</span>56%</div>
+          <div class="chip"><span>Wind</span>8 mph</div>
+        </div>
+      </section>
+
+      <section class="testimonials" aria-labelledby="testimonials-title">
+        <span class="section-label">Testimonials</span>
+        <h1 class="section-title" id="testimonials-title">Loved by teams that want polished interfaces and thoughtful details.</h1>
+        <p class="section-copy">
+          From product teams to founders, people rely on experiences that feel clean, responsive, and easy to trust.
+          These testimonials highlight the kind of clarity and refinement this interface is designed to communicate.
+        </p>
+
+        <div class="testimonials-grid">
+          <article class="testimonial-card">
+            <div class="testimonial-header">
+              <div class="testimonial-avatar" aria-hidden="true">AL</div>
+              <div class="testimonial-meta">
+                <h3>Ava Lee</h3>
+                <p>Product Designer</p>
+              </div>
+            </div>
+            <p class="testimonial-quote">
+              The layout feels polished without being busy. It reads beautifully on mobile and still has enough character to feel premium.
+            </p>
+          </article>
+
+          <article class="testimonial-card">
+            <div class="testimonial-header">
+              <div class="testimonial-avatar" aria-hidden="true">MR</div>
+              <div class="testimonial-meta">
+                <h3>Marcus Rivera</h3>
+                <p>Engineering Lead</p>
+              </div>
+            </div>
+            <p class="testimonial-quote">
+              We needed something clean, responsive, and easy to drop into the product. The result fit instantly and looked production-ready.
+            </p>
+          </article>
+
+          <article class="testimonial-card">
+            <div class="testimonial-header">
+              <div class="testimonial-avatar" aria-hidden="true">SN</div>
+              <div class="testimonial-meta">
+                <h3>Sophia Nguyen</h3>
+                <p>Founder, Northstar Studio</p>
+              </div>
+            </div>
+            <p class="testimonial-quote">
+              The visual hierarchy is strong, the spacing feels intentional, and the section adds social proof without interrupting the rest of the page.
+            </p>
+          </article>
+        </div>
+      </section>
     </div>
-    <p class="temp" id="temperature">68°F</p>
-    <div class="condition">Cool breeze · Partly cloudy</div>
-    <div class="meta">
-      <div class="chip"><span>Humidity</span>56%</div>
-      <div class="chip"><span>Wind</span>8 mph</div>
-    </div>
-  </div>
+  </main>
 
   <script>
     const temperature = 68;
