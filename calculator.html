@@ -5,25 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Interactive Calculator</title>
   <style>
+    :root {
+      color-scheme: dark;
+      --page-bg-start: #1f2937;
+      --page-bg-end: #020617;
+      --surface: rgba(255, 255, 255, 0.08);
+      --surface-strong: rgba(15, 23, 42, 0.94);
+      --border: rgba(255, 255, 255, 0.12);
+      --text-primary: #ffffff;
+      --text-secondary: #cbd5e1;
+      --shadow: 0 28px 90px rgba(0, 0, 0, 0.45);
+      --toast-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+      --success: #22c55e;
+      --success-soft: rgba(34, 197, 94, 0.18);
+      --error: #ef4444;
+      --error-soft: rgba(239, 68, 68, 0.18);
+      --transition: 0.18s ease;
+    }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       min-height: 100vh;
       display: grid;
       place-items: center;
       font-family: Inter, Arial, sans-serif;
-      background: radial-gradient(circle at top, #1f2937, #020617 70%);
-      color: #fff;
+      background: radial-gradient(circle at top, var(--page-bg-start), var(--page-bg-end) 70%);
+      color: var(--text-primary);
     }
+
     .calculator {
       width: min(92vw, 390px);
       padding: 1.5rem;
       border-radius: 28px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: var(--surface);
+      border: 1px solid var(--border);
       backdrop-filter: blur(20px);
-      box-shadow: 0 28px 90px rgba(0,0,0,0.45);
+      box-shadow: var(--shadow);
     }
+
     .display {
       width: 100%;
       height: 84px;
@@ -31,16 +52,18 @@
       border: none;
       border-radius: 20px;
       padding: 1rem;
-      background: rgba(15,23,42,0.78);
+      background: rgba(15, 23, 42, 0.78);
       color: #fff;
       text-align: right;
       font-size: 2rem;
     }
+
     .keys {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 0.85rem;
     }
+
     button {
       border: none;
       border-radius: 18px;
@@ -49,24 +72,151 @@
       font-weight: 600;
       color: #fff;
       cursor: pointer;
-      background: rgba(255,255,255,0.08);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 12px 24px rgba(0,0,0,0.18);
-      transition: transform .18s ease, background .18s ease;
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 12px 24px rgba(0, 0, 0, 0.18);
+      transition: transform var(--transition), background var(--transition), opacity var(--transition);
     }
+
     button:hover {
       transform: translateY(-2px);
-      background: rgba(255,255,255,0.16);
+      background: rgba(255, 255, 255, 0.16);
     }
-    .operator { background: rgba(59,130,246,0.28); }
-    .operator:hover { background: rgba(59,130,246,0.42); }
-    .equal { background: linear-gradient(135deg, #22c55e, #16a34a); }
-    .equal:hover { background: linear-gradient(135deg, #34d399, #22c55e); }
-    .clear { background: rgba(239,68,68,0.28); }
-    .clear:hover { background: rgba(239,68,68,0.42); }
+
+    .operator { background: rgba(59, 130, 246, 0.28); }
+    .operator:hover { background: rgba(59, 130, 246, 0.42); }
+    .equal { background: linear-gradient(135deg, var(--success), #16a34a); }
+    .equal:hover { background: linear-gradient(135deg, #34d399, var(--success)); }
+    .clear { background: rgba(239, 68, 68, 0.28); }
+    .clear:hover { background: rgba(239, 68, 68, 0.42); }
     .span-2 { grid-column: span 2; }
+
+    .toast-region {
+      position: fixed;
+      top: 1.25rem;
+      right: 1.25rem;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      width: min(360px, calc(100vw - 2rem));
+      pointer-events: none;
+    }
+
+    .toast {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 0.85rem;
+      align-items: start;
+      padding: 0.95rem 1rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.94);
+      color: var(--text-primary);
+      box-shadow: var(--toast-shadow);
+      backdrop-filter: blur(20px);
+      opacity: 0;
+      transform: translateY(-10px) scale(0.98);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      pointer-events: auto;
+    }
+
+    .toast.is-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .toast.is-leaving {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.98);
+    }
+
+    .toast--success {
+      border-color: rgba(34, 197, 94, 0.35);
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.12), rgba(15, 23, 42, 0.94) 50%);
+    }
+
+    .toast--error {
+      border-color: rgba(239, 68, 68, 0.35);
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.14), rgba(15, 23, 42, 0.94) 50%);
+    }
+
+    .toast__icon {
+      width: 2rem;
+      height: 2rem;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .toast--success .toast__icon {
+      background: var(--success-soft);
+      color: #86efac;
+    }
+
+    .toast--error .toast__icon {
+      background: var(--error-soft);
+      color: #fca5a5;
+    }
+
+    .toast__message {
+      margin: 0;
+      padding-top: 0.15rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .toast__close {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 999px;
+      padding: 0;
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: none;
+      align-self: center;
+    }
+
+    .toast__close:hover {
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    @media (max-width: 640px) {
+      body {
+        align-items: end;
+        padding: 1rem;
+      }
+
+      .calculator {
+        width: min(100%, 390px);
+      }
+
+      .toast-region {
+        top: auto;
+        right: 1rem;
+        bottom: 1rem;
+        left: 1rem;
+        width: auto;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+      }
+
+      .toast {
+        transform: none;
+      }
+    }
   </style>
 </head>
 <body>
+  <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="false"></div>
+
   <div class="calculator">
     <input id="display" class="display" type="text" value="0" readonly>
     <div class="keys">
@@ -97,10 +247,76 @@
 
   <script>
     const display = document.getElementById('display');
-    const buttons = document.querySelectorAll('button');
+    const buttons = document.querySelectorAll('button[data-action], button[data-value]');
+    const toastRegion = document.getElementById('toast-region');
 
     function setDisplay(value) {
       display.value = value || '0';
+    }
+
+    function dismissToast(toast) {
+      if (!toast || toast.dataset.state === 'leaving') {
+        return;
+      }
+
+      toast.dataset.state = 'leaving';
+      const timerId = Number(toast.dataset.timerId);
+      if (timerId) {
+        window.clearTimeout(timerId);
+      }
+
+      toast.classList.remove('is-visible');
+      toast.classList.add('is-leaving');
+
+      window.setTimeout(() => {
+        toast.remove();
+      }, 220);
+    }
+
+    function showToast(message, variant = 'success') {
+      const toast = document.createElement('div');
+      const icon = variant === 'success' ? '✓' : '!';
+      toast.className = `toast toast--${variant}`;
+      toast.setAttribute('role', 'status');
+      toast.innerHTML = `
+        <div class="toast__icon" aria-hidden="true">${icon}</div>
+        <p class="toast__message"></p>
+        <button class="toast__close" type="button" aria-label="Dismiss notification">×</button>
+      `;
+
+      toast.querySelector('.toast__message').textContent = message;
+      toast.querySelector('.toast__close').addEventListener('click', () => dismissToast(toast));
+      toastRegion.prepend(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.add('is-visible');
+      });
+
+      const timerId = window.setTimeout(() => dismissToast(toast), 4000);
+      toast.dataset.timerId = String(timerId);
+      return toast;
+    }
+
+    function normalizeExpression(expression) {
+      return expression.replace(/−/g, '-').replace(/×/g, '*').replace(/÷/g, '/');
+    }
+
+    function isSafeExpression(expression) {
+      return /^[0-9+\-*/.()\s]+$/.test(expression);
+    }
+
+    function evaluateExpression(expression) {
+      const normalized = normalizeExpression(expression);
+      if (!normalized || !isSafeExpression(normalized)) {
+        throw new Error('Unsafe expression');
+      }
+
+      const result = Function(`"use strict"; return (${normalized});`)();
+      if (!Number.isFinite(result)) {
+        throw new Error('Invalid result');
+      }
+
+      return result;
     }
 
     buttons.forEach((button) => {
@@ -109,6 +325,7 @@
 
         if (action === 'clear') {
           setDisplay('0');
+          showToast('Calculator reset.', 'success');
           return;
         }
 
@@ -119,10 +336,12 @@
 
         if (action === 'calculate') {
           try {
-            const result = Function(`return (${display.value})`)();
+            const result = evaluateExpression(display.value);
             setDisplay(String(result));
+            showToast('Calculation completed successfully.', 'success');
           } catch {
             setDisplay('Error');
+            showToast('Unable to evaluate that expression.', 'error');
           }
           return;
         }
