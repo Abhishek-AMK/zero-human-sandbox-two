@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # zero-human-sandbox-two
 
 ## Backend routes
@@ -63,3 +64,6 @@ If port `3000` is already busy in your environment, you can run the server on an
 ```bash
 PORT=3100 npm start
 ```
+=======
+# paperclipTest
+>>>>>>> 311728e6 (Initial commit)
