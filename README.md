@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+# paperclipTest
+=======
+<<<<<<< HEAD
+# testing_2
+=======
+<<<<<<< HEAD
+>>>>>>> 14c0eb3f (chore: prepare automated scribe PR)
 # zero-human-sandbox-two
 
 ## Backend routes
@@ -63,3 +73,11 @@ If port `3000` is already busy in your environment, you can run the server on an
 ```bash
 PORT=3100 npm start
 ```
+<<<<<<< HEAD
+=======
+=======
+# paperclipTest
+>>>>>>> 311728e6 (Initial commit)
+>>>>>>> d182bf76 (feat: Implement React volunteering platform UI with core components)
+>>>>>>> 67805f7a (feat: Develop React movie ticket booking app with key features)
+>>>>>>> 14c0eb3f (chore: prepare automated scribe PR)
